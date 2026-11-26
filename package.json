@@ -1,0 +1,11 @@
+{
+  "name": "seed-exhibition-cockpit",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node source/package.mjs",
+    "test": "node source/test.mjs"
+  },
+  "dependencies": { "three": "0.186.1" },
+  "devDependencies": { "rolldown": "1.2.13", "playwright-core": "1.63.0" }
+}
