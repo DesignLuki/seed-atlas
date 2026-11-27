@@ -43,7 +43,7 @@ function svgChart(t){
 function drawPanel(){
   const t=topics[s.t],a=byId.get(s.asset),panel=$('panel');panel.hidden=!t;
   if(!t){panel.replaceChildren();return}
-  const header='<div class="eyebrow"><span>'+(a?'展品档案　/　'+a[0]:'业务专题　/　演示数据')+'</span><button class="close" aria-label="关闭详情">×</button></div>';
+  const header='<div class="eyebrow"><span>'+(a?'展品档案　/　'+a[0]:'业务专题')+'</span><button class="close" aria-label="关闭详情">×</button></div>';
   if(a){
     const rec=s.record;
     panel.innerHTML=header+'<h2>'+a[1]+'</h2><p>'+a[5]+'</p><dl class="definition"><dt>所属展台</dt><dd>'+catalog.stations.find(r=>r[0]===a[2])[1]+'</dd><dt>业务专题</dt><dd>'+t.name+'</dd>'+(rec?'<dt>关联记录</dt><dd>'+rec.slice(0,3).join(' · ')+'</dd>':'')+'</dl><button class="back">‹ 返回专题</button>';
