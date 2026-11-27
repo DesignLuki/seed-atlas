@@ -25,6 +25,18 @@ header{grid-row:1;align-items:center;height:auto}.utility button{min-height:36px
 #stage,#graph{grid-row:4;min-height:0;height:100%;overflow:hidden}#stage canvas{position:absolute;inset:0;width:100%;height:100%}#graph .graphhead{margin-left:4px}
 #panel{grid-row:5;max-height:30dvh;overflow-y:auto;padding:10px 14px}.viewbar{grid-row:6;align-self:center}.viewbar nav{display:grid;grid-template-columns:repeat(3,1fr);gap:1px}.viewbar button{padding:4px 1px;min-height:38px;letter-spacing:0}.playbar{grid-column:2;grid-row:7;align-self:center}#sample{grid-column:1;grid-row:7;align-self:center}#palettes{top:51px}
 }
+
+/* Scope native scrolling and its visual treatment to the detail panel. */
+#panel{overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:var(--edge) transparent}
+@supports selector(::-webkit-scrollbar){
+  #panel{scrollbar-width:auto;scrollbar-color:auto}
+  #panel::-webkit-scrollbar{width:5px}
+  #panel::-webkit-scrollbar-track,#panel::-webkit-scrollbar-corner{background:transparent}
+  #panel::-webkit-scrollbar-thumb{background:var(--edge);border-radius:8px}
+  #panel::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+  #panel::-webkit-scrollbar-button{display:none}
+}
+@media(forced-colors:active){#panel{scrollbar-color:auto}}
 </style>
 <body data-theme="jade"><div id="screen">
 <svg class="frame" aria-hidden="true" viewBox="0 0 1800 800" preserveAspectRatio="none"><defs><linearGradient id="glow" x1="0" x2="1"><stop stop-color="var(--accent)" stop-opacity=".45"/><stop offset=".28" stop-color="var(--accent)" stop-opacity=".8"/><stop offset=".5" stop-color="var(--shine)"/><stop offset=".73" stop-color="var(--accent)" stop-opacity=".7"/><stop offset="1" stop-color="var(--accent)" stop-opacity=".42"/></linearGradient></defs><path d="M18 12H496 Q505 12 513 21 H694 Q706 21 718 34 L738 54 Q745 61 760 61 H1040 Q1055 61 1062 54 L1082 34 Q1094 21 1106 21 H1287 Q1296 12 1304 12 H1782 Q1792 12 1792 24 V776 Q1792 788 1780 788 H1240 L1228 780 H572 L560 788 H20 Q8 788 8 776 V25 Q8 12 18 12Z" fill="none" stroke="url(#glow)" stroke-width="1.4"/><path d="M30 21H487L498 28H679Q695 28 705 38L723 56M1077 56L1095 38Q1105 28 1121 28H1302L1313 21H1770M31 780H487M1313 780H1769" fill="none" stroke="var(--accent)" opacity=".4"/><path d="M12 290V365M1788 435V510" stroke="var(--accent)" stroke-width="2.5"/></svg>

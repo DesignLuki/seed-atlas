@@ -25,3 +25,15 @@ header{grid-row:1;align-items:center;height:auto}.utility button{min-height:36px
 #stage,#graph{grid-row:4;min-height:0;height:100%;overflow:hidden}#stage canvas{position:absolute;inset:0;width:100%;height:100%}#graph .graphhead{margin-left:4px}
 #panel{grid-row:5;max-height:30dvh;overflow-y:auto;padding:10px 14px}.viewbar{grid-row:6;align-self:center}.viewbar nav{display:grid;grid-template-columns:repeat(3,1fr);gap:1px}.viewbar button{padding:4px 1px;min-height:38px;letter-spacing:0}.playbar{grid-column:2;grid-row:7;align-self:center}#sample{grid-column:1;grid-row:7;align-self:center}#palettes{top:51px}
 }
+
+/* Scope native scrolling and its visual treatment to the detail panel. */
+#panel{overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:var(--edge) transparent}
+@supports selector(::-webkit-scrollbar){
+  #panel{scrollbar-width:auto;scrollbar-color:auto}
+  #panel::-webkit-scrollbar{width:5px}
+  #panel::-webkit-scrollbar-track,#panel::-webkit-scrollbar-corner{background:transparent}
+  #panel::-webkit-scrollbar-thumb{background:var(--edge);border-radius:8px}
+  #panel::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+  #panel::-webkit-scrollbar-button{display:none}
+}
+@media(forced-colors:active){#panel{scrollbar-color:auto}}
