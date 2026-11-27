@@ -79,7 +79,7 @@ export async function makeScene(host,catalog,onPick,onDrag){
         [p.dot(right),p.dot(up),p.dot(dir)].forEach((v,i)=>{bounds[2*i]=Math.min(bounds[2*i],v);bounds[2*i+1]=Math.max(bounds[2*i+1],v)});
       }
     });
-    const [l,r,b,t,n,f]=bounds,aspect=w/h,half=Math.max((r-l)/aspect,t-b)*.5*(state.asset?1.52:state.station?1.36:1.10);
+    const [l,r,b,t,n,f]=bounds,aspect=w/h,half=Math.max((r-l)/aspect,t-b)*.5*(w<600?1.10:1)*(state.asset?1.52:state.station?1.36:1.10);
     const target=right.multiplyScalar((r+l)/2).add(up.multiplyScalar((b+t)/2+.04*half)).addScaledVector(dir,(n+f)/2);
     const next=target.clone().addScaledVector(dir,40);
     camera.left=-aspect;camera.right=aspect;camera.top=1;camera.bottom=-1;
@@ -89,7 +89,7 @@ export async function makeScene(host,catalog,onPick,onDrag){
     function frame(now){
       const t=duration?Math.min(1,(now-start)/duration):1,k=1-(1-t)**3;
       camera.position.lerpVectors(from,next,k);controls.target.lerpVectors(fromTarget,target,k);
-      camera.zoom=T.MathUtils.lerp(startZoom,endZoom,k);camera.updateProjectionMatrix();camera.lookAt(controls.target);controls.update();draw();
+      camera.zoom=T.MathUtils.lerp(startZoom,endZoom,k);camera.updateProjectionMatrix();camera.lookAt(controls.target);controls.update();camera.updateMatrixWorld();draw();
       if(t<1)anim=requestAnimationFrame(frame);
     }frame(start);
   }

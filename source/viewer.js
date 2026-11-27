@@ -55,6 +55,8 @@ function drawPanel(){
   }
   panel.querySelector('.close').onclick=manual(closePanel);panel.scrollTop=0;
 }
+$('mobileTopic').innerHTML='<option value="-1">全部专题</option>'+topics.map((t,i)=>'<option value="'+i+'">'+t.name+'</option>').join('');
+$('mobileTopic').onchange=manual(()=>selectTopic(Number($('mobileTopic').value)));
 const graphPos=[[9,36],[29,36],[51,17],[51,66],[88,36],[72,66],[25,83]],edges=[[0,1],[1,2],[1,3],[2,4],[3,5],[5,4],[6,0],[6,3]];
 function initGraph(){
   const net=$('network'),svg=net.querySelector('svg');svg.setAttribute('viewBox','0 0 1000 500');svg.setAttribute('preserveAspectRatio','none');
@@ -65,6 +67,7 @@ function initGraph(){
   topics.forEach((t,i)=>{const b=document.createElement('button');b.className='node';b.dataset.node=i;b.style.left=graphPos[i][0]+'%';b.style.top=graphPos[i][1]+'%';b.innerHTML=icon(t.icon)+t.short;b.onclick=manual(()=>selectTopic(i));net.append(b)});
 }
 function render(smooth=true){
+  $('mobileTopic').value=String(s.t);
   $('graph').hidden=s.view!==1;$('stage').hidden=s.view===1;$('sandbox').hidden=s.view!==2;
   $('screen').classList.toggle('detail',s.t>=0);drawPanel();
   activeButtons('#nav button','topic',s.t);activeButtons('#views button','view',s.view);activeButtons('.node','node',s.t);

@@ -51,7 +51,7 @@ await press('#theme');await press('#palettes [data-theme="jade"]');
 await press('#full');check('进入全屏',await page.evaluate(()=>!!document.fullscreenElement));await press('#full');
 await page.setViewportSize({width:2097,height:750});await page.waitForTimeout(240);await page.screenshot({path:'review/超宽屏.png'});
 await page.setViewportSize({width:1280,height:720});await press('[data-topic="3"]');await page.screenshot({path:'review/基地监管.png'});
-await page.setViewportSize({width:390,height:844});await press('[data-topic="6"]');check('窄屏导航',await page.locator('#panel h2').innerText()==='种业政策与产业服务');
+await page.setViewportSize({width:390,height:844});await page.locator('#mobileTopic').selectOption('6');check('窄屏导航',await page.locator('#panel h2').innerText()==='种业政策与产业服务');
 await page.setViewportSize({width:1536,height:760});await page.emulateMedia({reducedMotion:'no-preference'});await press('#play');await press('[data-topic="1"]');await page.waitForTimeout(4400);
 check('手动打断后无旧镜头',await page.locator('#play').innerText()==='自动演示'&&await page.locator('#panel h2').innerText()==='育种研发协同');
 await press('#play');await page.waitForFunction(()=>document.querySelector('#play').textContent==='自动演示',null,{timeout:52000});
