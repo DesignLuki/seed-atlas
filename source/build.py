@@ -69,7 +69,7 @@ def plant(h,bushy=False):
     rod('stem',(0,0,.12),(.025,0,h),.019 if bushy else .025,'forest')
     for i in range(12 if bushy else 7):
         t=i/(12 if bushy else 7);a=i*2.39;l=(.53-.21*t)*(1 if bushy else .95);height=h*(.32+.66*t)
-        leaf('blade',.01,0,height,l,.10 if bushy else .135,a,.14+.05*t,'leaf' if i%2 else 'forest')
+        leaf('blade',.025*height/h,0,height,l if bushy else l*1.42,.10 if bushy else .061,a if bushy else i*pi+.19*i,.14+.05*t,'leaf' if i%2 else 'forest')
         if bushy:
             for side in [-1,1]:
                 leaf('leaflet',cos(a)*l*.36,sin(a)*l*.36,height+.14,l*.45,.059,a+side*.65,.07,'leaf')
@@ -85,7 +85,46 @@ def grains(dish=False):
         for j in range(6):
             x=(j-2.5)*.159+random.uniform(-.025,.025);y=(i-2)*.145+random.uniform(-.023,.023)
             if dish and x*x+y*y>.20:continue
-            oval('kernel',x,y,.12,.088,.057,.056,'sage' if dish and (i+j)%2 else 'grain',.16,random.uniform(-pi,pi))
+            scale=random.uniform(.88,1.08)
+            grain=radial('kernel',x,y,.070 if dish else .083,[(0,.049,.028),(.025,.085*scale,.048),(.057,.079*scale,.054),(.078,.054,.045),(.085,.027,.024)],'sage' if dish and (i+j)%2 else 'grain',18)
+            grain.rotation_euler.z=random.uniform(-pi,pi)
+def seed_sculpture():
+    mat('champagne','e5bc68',.68,.30)
+    mat('brushed_gold','bd862f',.64,.34)
+    mat('rib_gold','f5d894',.62,.27)
+    cylinder('medallion',0,0,0,.226,.044,'brushed_gold')
+    rows=[]
+    for j in range(33):
+        t=j/32; width=.034+.169*sin(pi*t)**.73
+        ring=[]
+        for k in range(64):
+            a=k*2*pi/64
+            crease=math.exp(-((cos(a)-.12)/.15)**2)
+            ring.append((width*cos(a)+.046*t,width*.73*sin(a)*(1-.30*crease),.041+.47*t))
+        rows.append(ring)
+    rings('split_seed',rows,'brushed_gold',smooth=True)
+    rod('shoot',(.025,0,.42),(.039,.005,.64),.034,'champagne')
+    for side,height,reach,depth in [(-1,.55,.30,-.018),(1,.42,.36,.028)]:
+        rows=[]
+        for j in range(29):
+            t=j/28
+            x=.034+side*reach*t**1.35
+            y=depth*t-.065*sin(pi*t)
+            z=.55+height*(1-(1-t)**1.35)
+            width=.004+.115*sin(pi*t)**.82
+            ring=[]
+            for k in range(32):
+                a=k*2*pi/32;u=cos(a)
+                # Fold the surface along the midrib; taper the edges and twist the tip.
+                twist=side*(.36+.48*t)
+                v=width*(.29*sin(a)+.39*abs(u)**1.45-.12*math.exp(-(u/.12)**2))
+                ring.append((x+width*u*cos(twist)-v*sin(twist),y+width*u*sin(twist)+v*cos(twist),z-side*.38*width*u))
+            rows.append(ring)
+        blade=rings('folded_blade',rows,'champagne',smooth=True)
+        blade.data.materials.append(mats['rib_gold'])
+        for f in list(blade.data.polygons)[1:-1]:
+            if (f.index-1)%32 in (23,24):f.material_index=1
+
 def build_asset(a):
     if a=='A01':grains()
     elif a=='A02':
@@ -108,14 +147,14 @@ def build_asset(a):
         for j in range(2):
             rows=[]; n=120
             for k in range(121):
-                t=k/120;radius=.178*(.023+.977*sin(pi*(.08+.919*t))**.64)
+                t=k/120;radius=.178*(.035+.965*sin(pi*(.20+.797*t))**.43)
                 line=[]
                 for i in range(n):
                     ang=2*pi*i/n
                     # Shallow grooves between the rounded, staggered kernel shoulders.
-                    along=abs(cos(pi*(k/6)))**8
+                    along=abs(cos(pi*(k/6+.11*sin(ang*3+j))))**6
                     across=abs(cos(7.5*ang+.35*sin(pi*k/6)+j))**9
-                    rr=radius*(1-.10*along-.095*across)
+                    rr=radius*(1-.14*along-.13*across)
                     line.append((rr*cos(ang),rr*sin(ang),1.22*t))
                 rows.append(line)
             o=rings('ear',rows,'gold' if j else 'lemon',(j*.36-.22,-.20+.165*j,.0367),True)
@@ -158,8 +197,7 @@ def build_asset(a):
             cylinder('cap',x,0,.08+h,.088,.07,'porcelain')
             cylinder('band',x,0,.115+h*.65,.084,.082,'porcelain')
     elif a=='A11':
-        oval('grain',0,0,.24,.12,.115,.26,'gold',.07)
-        for s in [-1,1]:oval('wing',s*.113,s*.021,.60,.098,.105,.31,'gold',s*.45)
+        seed_sculpture()
     elif a=='A12':
         for i in range(2):
             x=i*.48-.23;h=.62+i*.07
